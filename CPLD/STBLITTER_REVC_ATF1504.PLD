@@ -1,0 +1,190 @@
+Name     STBlitter ;
+PartNo   00 ;
+Date     2020-10-26 ;
+Revision 03 ;
+Designer Anders Granlund ;
+Company  www.happydaze.se ;
+Assembly None ;
+Location  ;
+Device   f1504isptqfp100;
+
+PROPERTY ATMEL{JTAG=on};
+PROPERTY ATMEL{TDI_pullup=on};
+PROPERTY ATMEL{TMS_pullup=on};
+PROPERTY ATMEL{pd1=off};
+PROPERTY ATMEL{pd2=off};
+PROPERTY ATMEL{cascade_logic=off};
+PROPERTY ATMEL{logic_doubling=off};
+PROPERTY ATMEL{output_fast=on};
+PROPERTY ATMEL{pin_keep=on};
+PROPERTY ATMEL{preassign=keep};
+PROPERTY ATMEL{security=off};
+PROPERTY ATMEL{xor_synthesis=on};
+
+
+/*----------------------------------------------------
+ *
+ *                STBlitter Rev.C
+ *
+ *            (c)2020 Anders Granlund
+ * 
+ ----------------------------------------------------*/
+
+/* ------ CPU pins ------ */
+pin 87   = CLK;
+pin 17   = RESET;
+pin 19   = DTACK;
+pin 25   = AS;
+pin 20   = RW;
+//pin xx = FC0;
+//pin xx = FC1;
+//pin xx = FC2;
+pin 12   = D0;
+pin 92   = D1;
+pin 21   = LDS;
+pin 23   = UDS;
+pin 30   = A1;
+pin 31   = A2;
+pin 32   = A3;
+pin 33   = A4;
+pin 35   = A5;
+pin 36   = A6;
+pin 37   = A7;
+pin 40   = A8;
+pin 41   = A9;
+pin 42   = A10;
+pin 44   = A11;
+pin 45   = A12;
+pin 46   = A13;
+pin 47   = A14;
+pin 48   = A15;
+pin 52   = A16;
+pin 54   = A17;
+pin 56   = A18;
+pin 57   = A19;
+pin 58   = A20;
+pin 60   = A21;
+pin 61   = A22;
+pin 63   = A23;
+
+/* ------ IDE pins ------ */
+pin 96  = IDE_EN;
+pin 98  = IDE_ADDR1;
+pin 97  = IDE_ADDR0;
+pin 100 = IDE_CS0;
+pin 99  = IDE_CS1;
+pin 9   = IDE_RD;
+pin 10  = IDE_WR;
+pin 8   = IDE_RDY;
+pin 6   = IDE_IRQ;
+pin 13  = ACSI10;
+
+/* ------ ROM pins ------ */
+pin 94   = ROM_EN;
+pin 16   = ROM_IN;
+pin 14   = ROM_CE;
+
+
+/* ------ ET4000 pins ------ */
+pin 93   = ET_EN;
+pin 68   = ET_RDY;
+pin 75   = ET_IRQ;
+pin 71   = ET_VRES;
+pin 64   = ET_IORD;
+pin 67   = ET_IOWR;
+pin 65   = ET_MEMRD;
+pin 69   = ET_MEMWR;
+
+
+/* ------ Expansion IO pins ------ */
+pin 76   = IO76;
+pin 79   = IO79;
+/*
+pin 80   = IO80;
+pin 81   = IO81;
+pin 83   = IO83;
+pin 84   = IO84;
+*/
+
+/*----------------------------------------------------
+ *
+ *                     LOGIC
+ * 
+ ----------------------------------------------------*/
+
+field ADDR = [A23..0];
+
+
+/*----------------------------------------------------
+ * TOS decoder
+ * -------------------------------------------------*/
+rom_ce_start = ADDR:[000000..000007];      // start of TOS
+rom_ce_1     = ADDR:[FC0000..FF7FFF];      // TOS 1
+rom_ce_2     = ADDR:[E00000..E3FFFF];      // TOS 2
+rom_ce_3     = ADDR:[E00000..E7FFFF];      // TOS 3
+//rom_decode	= ROM_EN & !AS & RW & (!ROM_IN # rom_ce_3); 
+rom_decode	= ROM_EN & !AS & RW & (rom_ce_start # rom_ce_1 # rom_ce_3); 
+rom_select	= rom_decode;
+!ROM_CE	= rom_select;
+
+
+/*----------------------------------------------------
+ * IDE
+ * -------------------------------------------------*/
+field ide_addr = [A7, A6];
+field ide_slot = [!IDE_ADDR1, !IDE_ADDR0];
+ide_decode = ADDR:[F00000..F000F9] & IDE_EN & (ide_addr == ide_slot);
+ide_select = ide_decode;
+ide_wait = 'b'0;	/* !IDE_RDY & IDE_EN; */
+!IDE_CS0 = ide_decode & !A5;
+!IDE_CS1 = ide_decode & A5;
+!IDE_RD = ide_decode & !AS & RW;
+!IDE_WR = ide_decode & !AS & !RW;
+ACSI10.oe = IDE_IRQ & IDE_EN;
+ACSI10 = 'b'0;
+
+
+/*----------------------------------------------------
+ * ET4000
+ * -------------------------------------------------*/
+et_decode_base =	(A23 & A22 & !A21 & !A20);
+et_decode_io	=	et_decode_base & A19 & A18 & A17 & A16;
+et_decode_mem  =	(et_decode_base & !A19) #
+			(et_decode_base & !A18) #
+			(et_decode_base & !A17) #
+			(et_decode_base & !A16);
+
+!ET_MEMWR = (et_decode_mem & (!UDS # !LDS) & !AS & !RW) # (!ET_MEMWR & !ET_RDY);
+!ET_MEMRD = (et_decode_mem & (!UDS # !LDS) & !AS & RW) # (!ET_MEMRD & !ET_RDY);
+!ET_IOWR  = (et_decode_io & (!UDS # !LDS) & !AS & !RW) # (!ET_IOWR & !ET_RDY);
+!ET_IORD  = (et_decode_io & (!UDS # !LDS) & !AS & RW) # (!ET_IORD & !ET_RDY);
+
+ET_VRES = !RESET;
+
+node et_select;
+et_select.ck = CLK;
+et_select.d =	ET_EN & (
+		(ET_RDY & !ET_MEMWR) #
+		(ET_RDY & !ET_MEMRD) #
+		(ET_RDY & (!UDS # !LDS) & !AS & (et_decode_io # et_decode_mem))
+		);
+
+
+/*----------------------------------------------------
+ * Expansion pins
+ * -------------------------------------------------*/
+IO76 = !IO79;
+
+/*
+IO80 = 'b'1;
+IO81 = 'b'1;
+IO83 = 'b'1;
+IO84 = 'b'1;
+*/
+
+/*----------------------------------------------------
+ * Generic
+ * -------------------------------------------------*/
+DTACK.oe = (rom_select # ide_select # et_select) & !ide_wait;
+DTACK = 'b'0;
+

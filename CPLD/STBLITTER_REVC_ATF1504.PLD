@@ -16,7 +16,7 @@ PROPERTY ATMEL{pd2=off};
 PROPERTY ATMEL{cascade_logic=off};
 PROPERTY ATMEL{logic_doubling=off};
 PROPERTY ATMEL{output_fast=on};
-PROPERTY ATMEL{pin_keep=on};
+PROPERTY ATMEL{pin_keep=off};
 PROPERTY ATMEL{preassign=keep};
 PROPERTY ATMEL{security=off};
 PROPERTY ATMEL{xor_synthesis=on};
@@ -154,10 +154,10 @@ et_decode_mem  =	(et_decode_base & !A19) #
 			(et_decode_base & !A17) #
 			(et_decode_base & !A16);
 
-!ET_MEMWR = (et_decode_mem & (!UDS # !LDS) & !AS & !RW) # (!ET_MEMWR & !ET_RDY);
-!ET_MEMRD = (et_decode_mem & (!UDS # !LDS) & !AS & RW) # (!ET_MEMRD & !ET_RDY);
-!ET_IOWR  = (et_decode_io & (!UDS # !LDS) & !AS & !RW) # (!ET_IOWR & !ET_RDY);
-!ET_IORD  = (et_decode_io & (!UDS # !LDS) & !AS & RW) # (!ET_IORD & !ET_RDY);
+!ET_MEMWR = (et_decode_mem & (!UDS # !LDS) & !AS & !RW & ET_RDY) # (!ET_MEMWR & !ET_RDY);
+!ET_MEMRD = (et_decode_mem & (!UDS # !LDS) & !AS & RW & ET_RDY) # (!ET_MEMRD & !ET_RDY);
+!ET_IOWR  = (et_decode_io & (!UDS # !LDS) & !AS & !RW & ET_RDY) # (!ET_IOWR & !ET_RDY);
+!ET_IORD  = (et_decode_io & (!UDS # !LDS) & !AS & RW & ET_RDY) # (!ET_IORD & !ET_RDY);
 
 ET_VRES = !RESET;
 

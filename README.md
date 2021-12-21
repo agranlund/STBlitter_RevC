@@ -9,6 +9,7 @@
 [Hints Archive]: https://web.archive.org/web/20211221063353/https://forum.atari-home.de/index.php?topic=12789.0
 
 [Anders Granlund]: http://www.happydaze.se/
+[Anders Granlund Archive]: https://web.archive.org/web/20211221080141/http://www.happydaze.se/
 
 
 [CPLD-JED]: CPLD/STBLITTER_REVC_ATF1504.jed
@@ -34,10 +35,10 @@
 # ST Blitter
 ##### *Revision C2*
 
-This repository provides **Blitter**, an **IDE**, a **TOS Decoder**<br>
-as well as the **ET4000 Connector** for the **Atari ST(M)**.
+A card providing **Blitter**, **IDE**, **TOS Decoding** as<br>
+well as the **ET4000 Connector** for the **Atari ST(M)**.
 
-Original designed by **[Anders Granlund]**
+Original designed by **Anders Granlund** ⸢ [:globe_with_meridians:][Anders Granlund] ⸥ ⸢ [:floppy_disk:][Anders Granlund Archive] ⸥
 
 ---
 

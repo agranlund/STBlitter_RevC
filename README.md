@@ -54,7 +54,7 @@ Original designed by **[Anders Granlund]**
 
 <table>
     <tr>
-      <td colspan="6"><b>Gerber</b></td>
+      <th colspan = '6' >Gerber</th>
     </tr>
     <tr>
         <td><a href = 'Gerber/STBlitter_RevC2.GBL' ><b>GPL</b></a></td>

@@ -1,12 +1,19 @@
 
 # Graphics Card
 
-The **ET4000** feature can be disabled with the `ET Disable` jumper.
-
 <br>
 
 For wiring instructions, check out this **[Example][ET4000 Wiring]**.
 
+<br>
+<br>
+
+## Disabling
+
+The **ET4000** feature can be disabled with the `ET Disable` jumper.
+
+<br>
+<br>
 
 ## Warning
 
@@ -15,17 +22,17 @@ This assumes a **ET4000** Card that only needs `+5V` and `GND`.
 If your card requires `+12V` / `-12V`, you will have<br>
 to wire this manually with the following pins.
 
-| Voltage | Pin |
-|:-------:|:---:|
-| `+12V` | **B9** |
-| `-12V` | **B7** |
+| Pin | Voltage |
+|:---:|:-------:|
+| **B9** | `+12V`
+| **B7** | `-12V`
 
 <br>
 <br>
 
 ## Interface
 
-The interface is based on **Till Harbaum's** `STGA`. ⸢ [:globe_with_meridians:][STGA] ⸥ ⸢ [:floppy_disk:][STGA Archive] ⸥
+The interface is based on **Till Harbaum's** `STGA`. ⸢ [🌐][STGA] ⸥ ⸢ [💾][STGA Archive] ⸥
 
 It has only been tested with the `NVDI 5.03` `ET4000` drivers.
 
@@ -62,7 +69,7 @@ configure your hardware with the `VMF-4000` tools:
 
 ## Useful
 
-Hints for **STGA** under **NVDI**.  ⸢ [:globe_with_meridians:][Hints] ⸥ ⸢ [:floppy_disk:][Hints Archive] ⸥
+Hints for **STGA** under **NVDI**.  ⸢ [🌐][Hints] ⸥ ⸢ [💾][Hints Archive] ⸥
 
 Atari drivers are quite picky about which `ET4000` they support,<br>
 especially when it comes to `RAMDAC` and / or clock generator.

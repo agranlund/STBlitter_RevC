@@ -1,7 +1,16 @@
 
-## Blitter
+# Blitter
 
-1. Locate the jumpers in the CPU socket area.
+*How to configure Blitter.*
 
-2. `Enable / Disable` **Blitter** by setting the <br>
-   `Blitter Enable` solder-jumper accordingly.
+<br>
+
+## Steps
+
+1.  Locate the jumpers that can be <br>
+    found in the CPU socket area.
+
+2.  Enable it by connecting the <br>
+    `Blitter Enable` jumper.
+
+<br>

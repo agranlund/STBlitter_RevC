@@ -33,6 +33,8 @@ well as the **ET4000 Connector** for the **Atari ST(M)**.
 
 ## Files
 
+<br>
+
 <table>
     <tr>
         <th>CPLD</th>
@@ -65,6 +67,8 @@ well as the **ET4000 Connector** for the **Atari ST(M)**.
 <br>
 
 ## BOM
+
+<br>
 
 | Component | Value | Size |
 |:----------|:-----:|:----:|
